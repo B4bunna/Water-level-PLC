@@ -1,2 +1,2 @@
-# Water-level-PLC
+# Water-level/liter-PLC
 Simple Delta based PLC programme to calculate the water level per liter in a cylindrical tank
