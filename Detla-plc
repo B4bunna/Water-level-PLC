@@ -1,0 +1,38 @@
+// Water/Liter Calculation in a Cylindrical Tank using DELTA PLC
+// Author: Ahmed Abdul-mageed & Mohammed Omer
+// Date: Octobre 2022
+
+// Assumptions:
+// - The tank is a perfect cylinder
+// - The tank has a height (h) and a diameter (d)
+// - The sensor is located at the bottom of the tank
+// - The tank is full when the sensor reads 100% and empty when it reads 0%
+// - The PLC input is a 16-bit integer ranging from 0 to 65535 (corresponding to 0% to 100%)
+
+// Inputs:
+M8000 : Sensor Value (16-bit integer)
+
+// Outputs:
+D : Water/Liter Calculation (floating-point value)
+
+// Constants:
+D100 : Maximum Sensor Value (65535)
+D15 : Pi (3.14)
+
+// Data Registers:
+D7 : Tank Diameter
+D14 : Tank Height
+D : Calculated Water/Liter Value
+
+// Calculate the water/liter value based on the sensor input
+LD M8000 ; Load the input value (0-65535) from the sensor into memory
+MOV K65535 D100 ; Load the maximum value (65535) into a constant value (D100)
+DIV D100 ; Divide the input value by 65535 to get a percentage value (0-1)
+MUL D14 ; Multiply the percentage value by the tank height (h) to get the water level in centimeters
+MOV K3.14 D15 ; Load the value of pi (3.14) into a constant value (D15)
+MOV D7 D ; Load the tank diameter (d) into a data register (D7)
+MUL D7 ; Multiply the diameter by itself to get the area of the tank's cross-section (d^2)
+DIV D15 ; Divide the cross-sectional area by pi to get the tank's base area (A)
+MUL D ; Multiply the base area by the water level to get the volume of water in cubic centimeters
+DIV K1000 ; Divide the volume by 1000 to convert it to liters
+MOV D K100 ; Move the calculated value to a data register (D) for output
